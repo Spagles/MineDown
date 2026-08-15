@@ -725,9 +725,11 @@ public class MineDownParser {
             if (hoverAction == null) {
                 hoverAction = HoverEvent.Action.NAMES.value(parts[0].toLowerCase(Locale.ROOT));
             }
-            try {
-                clickAction = ClickEvent.Action.NAMES.value(parts[0].toLowerCase(Locale.ROOT));
-            } catch (IllegalArgumentException ignored) {
+            if (clickAction == null) {
+                try {
+                    clickAction = ClickEvent.Action.NAMES.value(parts[0].toLowerCase(Locale.ROOT));
+                } catch (IllegalArgumentException ignored) {
+                }
             }
 
             String valueStr = getValue(i, parts.length > 1 ? parts[1] : "", defParts, clickAction != null || hoverAction != null);
