@@ -848,7 +848,7 @@ public class MineDownParser {
     }
 
     private String getValue(AtomicInteger i, String firstPart, List<String> defParts, boolean hasAction) {
-        int bracketDepth = !firstPart.isEmpty() && firstPart.startsWith("{") && hasAction ? 1 : 0;
+        int bracketDepth = firstPart.startsWith("{") && hasAction ? 1 : 0;
 
         StringBuilder value = new StringBuilder();
         if (!firstPart.isEmpty() && hasAction) {
@@ -887,7 +887,18 @@ public class MineDownParser {
             value.append(part);
         }
 
-        return value.toString();
+        String valueString = value.toString();
+
+        while (bracketDepth > 0) {
+            bracketDepth--;
+            if (valueString.endsWith("}") && !valueString.endsWith("\\}")) {
+                valueString = valueString.substring(0, valueString.length() - 1);
+            } else {
+                valueString = "{" + valueString;
+            }
+        }
+
+        return valueString.replace("\\{", "{").replace("\\}", "}");
     }
 
     protected ComponentBuilder<?,?> builder() {
