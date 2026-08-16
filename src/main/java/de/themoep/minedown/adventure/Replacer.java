@@ -151,13 +151,12 @@ public class Replacer {
      */
     public Replacer replace(Map<String, ?> replacements) {
         if (replacements != null && !replacements.isEmpty()) {
-            Object any = replacements.values().stream().filter(Objects::nonNull).findAny().orElse(null);
-            if (any instanceof String) {
-                replacements().putAll((Map<String, String>) replacements);
-            } else if (any instanceof Component) {
-                componentReplacements().putAll((Map<String, Component>) replacements);
-            } else {
-                for (Map.Entry<String, ?> entry : replacements.entrySet()) {
+            for (Map.Entry<String, ?> entry : replacements.entrySet()) {
+                if (entry.getValue() instanceof Component) {
+                    componentReplacements().put(entry.getKey(), (Component) entry.getValue());
+                } else if (entry.getValue() instanceof String) {
+                    replacements().put(entry.getKey(), (String) entry.getValue());
+                } else {
                     replacements().put(entry.getKey(), String.valueOf(entry.getValue()));
                 }
             }
@@ -366,6 +365,9 @@ public class Replacer {
      * @return The string with the placeholders replaced
      */
     String replaceStrings(String string) {
+        if (string == null) {
+            return null;
+        }
         for (Map.Entry<String, String> replacement : replacements().entrySet()) {
             String replValue = replacement.getValue() != null ? replacement.getValue() : "null";
             if (ignorePlaceholderCase()) {
