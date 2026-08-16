@@ -181,7 +181,7 @@ public class Util {
      * @throws IndexOutOfBoundsException if the {@code index} argument is not less than the length of this string.
      */
     public static boolean isEscaped(String string, int index) {
-        if (index - 1 > string.length()) {
+        if (index <= 0 || index > string.length()) {
             return false;
         }
         int e = 0;
