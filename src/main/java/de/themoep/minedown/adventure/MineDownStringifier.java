@@ -391,19 +391,19 @@ public class MineDownStringifier {
                     }
                 }
             }
-        } else {
-            formats.removeAll(this.formats);
         }
         for (TextDecoration format : formats) {
-            if (useLegacyFormatting()) {
-                try {
-                    char colorChar = Util.getLegacyFormatChar(format);
-                    sb.append(colorChar()).append(colorChar);
-                } catch (IllegalArgumentException e) {
-                    System.out.println(e.getMessage());
+            if (!this.formats.contains(format)) {
+                if (useLegacyFormatting()) {
+                    try {
+                        char colorChar = Util.getLegacyFormatChar(format);
+                        sb.append(colorChar()).append(colorChar);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
+                } else {
+                    sb.append(MineDown.getFormatString(format));
                 }
-            } else {
-                sb.append(MineDown.getFormatString(format));
             }
         }
         this.formats.clear();
