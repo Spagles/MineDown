@@ -339,7 +339,7 @@ public class Replacer {
         }
         builder.append(replacedComponents);
 
-        return builder.build();
+        return builder.build().compact();
     }
 
     /**

@@ -96,7 +96,7 @@ public class MineDown {
             if (replaceFirst()) {
                 message = replacer().replaceStrings(message);
             }
-            components = replacer().replaceIn(parser().parse(message).build());
+            components = replacer().replaceIn(parser().parse(message).build().compact());
         }
         return components();
     }

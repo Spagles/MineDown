@@ -72,9 +72,9 @@ public class ParserTest {
     public void testParseLegacy() {
         System.out.println("testParseLegacy");
         Assertions.assertAll(
-                () -> parse("&lbold &oitalic &0not bold or italic but black!", null, "{\"extra\":[{\"extra\":[{\"extra\":[{\"bold\":true,\"text\":\"bold \"}],\"text\":\"\"},{\"extra\":[{\"bold\":true,\"italic\":true,\"text\":\"italic \"}],\"text\":\"\"},{\"extra\":[{\"color\":\"black\",\"text\":\"not bold or italic but black!\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}"),
+                () -> parse("&lbold &oitalic &0not bold or italic but black!", null, "{\"extra\":[{\"bold\":true,\"text\":\"bold \"},{\"bold\":true,\"italic\":true,\"text\":\"italic \"},{\"color\":\"black\",\"text\":\"not bold or italic but black!\"}],\"text\":\"\"}"),
                 () -> parse("&cRed &land bold!", null, "\"bold\":true", "\"color\":\"red\""),
-                () -> parse("&cRed, &2Green and &rnot red nor green!", null, "{\"extra\":[{\"extra\":[{\"extra\":[{\"color\":\"red\",\"text\":\"Red, \"}],\"text\":\"\"},{\"extra\":[{\"color\":\"dark_green\",\"text\":\"Green and \"}],\"text\":\"\"},{\"extra\":[\"not red nor green!\"],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}"),
+                () -> parse("&cRed, &2Green and &rnot red nor green!", null, "{\"extra\":[{\"color\":\"red\",\"text\":\"Red, \"},{\"color\":\"dark_green\",\"text\":\"Green and \"},\"not red nor green!\"],\"text\":\"\"}"),
                 () -> parse("&bTest \n&cexample.com &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"http://example.com\"", "\\n"),
                 () -> parse("&bTest \n&chttps://example.com &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"https://example.com\"", "\\n"),
                 () -> parse("&bTest &chttps://example.com/test?t=2&d002=da0s#d2q &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"https://example.com/test?t=2&d002=da0s#d2q\"")
@@ -233,7 +233,7 @@ public class ParserTest {
     public void testParseNested() {
         Assertions.assertAll(
                 () -> parse("[outer start [inner](green) outer end](aqua)", null, "green", "aqua"),
-                () -> parse("[outer start \\[[inner](green)\\] outer end](aqua)", null, "green", "aqua", "[", "\"text\":\"]", "[\"}"),
+                () -> parse("[outer start \\[[inner](green)\\] outer end](aqua)", null, "green", "aqua", "[", "\"] outer end\"", "[\"}"),
                 () -> parse("[outer start [inner](green) outer end](aqua hover={[red hover](red)})", null, "green", "aqua", "show_text", "red hover", "red")
         );
     }
