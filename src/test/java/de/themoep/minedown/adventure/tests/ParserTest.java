@@ -69,11 +69,12 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseSimple() {
-        System.out.println("testParseSimple");
+    public void testParseLegacy() {
+        System.out.println("testParseLegacy");
         Assertions.assertAll(
-                () -> parse("&lbold &oitalic &0not bold or italic but black!", null, "\"bold\":true", "\"italic\":true", "\"color\":\"black\""),
+                () -> parse("&lbold &oitalic &0not bold or italic but black!", null, "{\"extra\":[{\"extra\":[{\"extra\":[{\"bold\":true,\"text\":\"bold \"}],\"text\":\"\"},{\"extra\":[{\"bold\":true,\"italic\":true,\"text\":\"italic \"}],\"text\":\"\"},{\"extra\":[{\"color\":\"black\",\"text\":\"not bold or italic but black!\"}],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}"),
                 () -> parse("&cRed &land bold!", null, "\"bold\":true", "\"color\":\"red\""),
+                () -> parse("&cRed, &2Green and &rnot red nor green!", null, "{\"extra\":[{\"extra\":[{\"extra\":[{\"color\":\"red\",\"text\":\"Red, \"}],\"text\":\"\"},{\"extra\":[{\"color\":\"dark_green\",\"text\":\"Green and \"}],\"text\":\"\"},{\"extra\":[\"not red nor green!\"],\"text\":\"\"}],\"text\":\"\"}],\"text\":\"\"}"),
                 () -> parse("&bTest \n&cexample.com &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"http://example.com\"", "\\n"),
                 () -> parse("&bTest \n&chttps://example.com &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"https://example.com\"", "\\n"),
                 () -> parse("&bTest &chttps://example.com/test?t=2&d002=da0s#d2q &rstring!", null, "\"action\":\"show_text\"", "\"action\":\"open_url\"", "\"url\":\"https://example.com/test?t=2&d002=da0s#d2q\"")

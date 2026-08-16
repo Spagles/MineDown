@@ -134,6 +134,7 @@ public class MineDownParser {
     private String insertion;
     private Integer rainbowPhase;
     private List<Map.Entry<TextColor, Boolean>> colors;
+    private boolean colorsAreLegacy = false;
     private ShadowColor shadow;
     private Map<TextDecoration, Boolean> format;
     private boolean formattingIsLegacy = false;
@@ -235,11 +236,14 @@ public class MineDownParser {
                                 if (builder() == null && ((format() != null && !format().isEmpty()) || (colors() != null && !colors().isEmpty()))) {
                                     builder(Component.text());
                                 }
+                                colorsAreLegacy(true);
+                                formattingIsLegacy(true);
                                 appendValue();
                                 colors(new ArrayList<>());
                                 rainbowPhase(null);
                                 format(new HashMap<>());
                             } else if (single.getKey() instanceof TextColor) {
+                                colorsAreLegacy(true);
                                 if (value().length() > 0) {
                                     if (builder() == null && format() != null && !format().isEmpty()) {
                                         builder(Component.text());
@@ -458,6 +462,11 @@ public class MineDownParser {
             }
             builder.append(component);
         }
+
+        if (builder() == null && (formattingIsLegacy() || colorsAreLegacy())) {
+            builder(Component.text());
+        }
+
         if (builder() == null) {
             builder(builder);
         } else {
@@ -988,6 +997,15 @@ public class MineDownParser {
         return this;
     }
 
+    protected MineDownParser colorsAreLegacy(boolean colorsAreLegacy) {
+        this.colorsAreLegacy = colorsAreLegacy;
+        return this;
+    }
+
+    protected boolean colorsAreLegacy() {
+        return colorsAreLegacy;
+    }
+
     protected MineDownParser rainbowPhase(Integer rainbowPhase) {
         this.rainbowPhase = rainbowPhase;
         return this;
@@ -1205,6 +1223,7 @@ public class MineDownParser {
             formattingIsLegacy(from.formattingIsLegacy());
             rainbowPhase(from.rainbowPhase());
             colors(from.colors());
+            colorsAreLegacy(from.colorsAreLegacy());
             clickEvent(from.clickEvent());
             hoverEvent(from.hoverEvent());
         }
@@ -1224,8 +1243,10 @@ public class MineDownParser {
         insertion = null;
         rainbowPhase = null;
         colors = null;
+        colorsAreLegacy = false;
         shadow = null;
         format = new HashMap<>();
+        formattingIsLegacy = false;
         clickEvent = null;
         hoverEvent = null;
         return this;
