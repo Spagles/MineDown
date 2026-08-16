@@ -71,12 +71,14 @@ public class Util {
      */
     public static Component applyFormat(Component component, Collection<TextDecoration> formats) {
         for (TextDecoration format : formats) {
-            component.decoration(format, true);
+            component = component.decoration(format, true);
         }
         if (!component.children().isEmpty()) {
+            List<Component> children = new ArrayList<>();
             for (Component extra : component.children()) {
-                applyFormat(extra, formats);
+                children.add(applyFormat(extra, formats));
             }
+            component = component.children(children);
         }
         return component;
     }
