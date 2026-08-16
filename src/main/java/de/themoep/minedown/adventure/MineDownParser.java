@@ -610,7 +610,7 @@ public class MineDownParser {
                 continue;
             }
 
-            if (defLowerCase.startsWith(PROFILE_PREFIX) && playerHead != null) {
+            if (defLowerCase.startsWith(PROFILE_PREFIX)) {
                 String valuePart = definition.substring(PROFILE_PREFIX.length());
                 if (!valuePart.startsWith("{") || !valuePart.endsWith("}")) {
                     if (!lenient()) {
